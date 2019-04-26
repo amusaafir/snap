@@ -21,7 +21,7 @@ template <class PGraph> void PlotClustCf(const PGraph& Graph, const TStr& FNmPre
 /// @param IsDir false: ignore edge directions and consider graph as undirected.
 template <class PGraph> void PlotHops(const PGraph& Graph, const TStr& FNmPref, TStr DescStr=TStr(), const bool& IsDir=false, const int& NApprox=32);
 /// Plots the distribution of the shortest path lengths of a Graph. Implementation is based on BFS.
-template <class PGraph> void PlotShortPathDistr(const PGraph& Graph, const TStr& FNmPref, TStr DescStr=TStr(), int TestNodes=TInt::Mx);
+template <class PGraph> void PlotShortPathDistr(const PGraph& Graph, const TStr& FNmPref, TStr DescStr=TStr(), int TestNodes=TInt::Mx, const double& refAvgDiam = -1, const int& refFullDiam = -1);
 /// Plots the k-Core node-size distribution: Core k vs. number of nodes in k-core
 template <class PGraph> void PlotKCoreNodes(const PGraph& Graph, const TStr& FNmPref, TStr DescStr=TStr());
 /// Plots the k-Core edge-size distribution: Core k vs. number of edges in k-core
@@ -137,7 +137,8 @@ void PlotHops(const PGraph& Graph, const TStr& FNmPref, TStr DescStr, const bool
 }
 
 template <class PGraph>
-void PlotShortPathDistr(const PGraph& Graph, const TStr& FNmPref, TStr DescStr, int TestNodes) {
+void PlotShortPathDistr(const PGraph& Graph, const TStr& FNmPref, TStr DescStr, int TestNodes,
+                         double& refAvgDiam, int& refFullDiam) {
   TIntH DistToCntH;
   TBreathFS<PGraph> BFS(Graph);
   // shotest paths
@@ -157,6 +158,13 @@ void PlotShortPathDistr(const PGraph& Graph, const TStr& FNmPref, TStr DescStr, 
   const double EffDiam = TSnap::TSnapDetail::CalcEffDiamPdf(DistNbrsPdfV, 0.9);
   const double AvgDiam = TSnap::TSnapDetail::CalcAvgDiamPdf(DistNbrsPdfV);
   const int FullDiam = (int) DistNbrsPdfV.Last().Val1;
+
+  refAvgDiam = AvgDiam;
+  refFullDiam = FullDiam;
+
+  printf("\nDiameter\t%d", FullDiam);
+  printf("\nAverage shortest path\t%.2f", AvgDiam);
+
   if (DescStr.Empty()) { DescStr = FNmPref; }
   TGnuPlot::PlotValV(DistNbrsPdfV, "diam."+FNmPref,
     TStr::Fmt("%s. G(%d, %d). Diam: avg:%.2f  eff:%.2f  max:%d", DescStr.CStr(), Graph->GetNodes(), Graph->GetEdges(),
@@ -187,3 +195,4 @@ void PlotKCoreEdges(const PGraph& Graph, const TStr& FNmPref, TStr DescStr) {
 
 
 } // namespace TSnap
+
