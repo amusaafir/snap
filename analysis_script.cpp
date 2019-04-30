@@ -253,10 +253,10 @@ void read_directed_graph(std::string file_path) {
     int amountEdges;
     if (COUNT_NODES_AND_EDGES) {
         amountOfNonZeroNodes = TSnap::CntNonZNodes(Graph);
-        amountEdges = TSnap::CntUniqUndirEdges(Graph);
+        amountEdges = TSnap::CntUniqDirEdges(Graph);
 
         std::cout << "Unique amount of (non-zero degree) nodes\t" << amountOfNonZeroNodes << std::endl;
-        std::cout << "Unique undirected edges\t" << amountEdges << std::endl;
+        std::cout << "Unique directed edges\t" << amountEdges << std::endl;
     }
 
     outputFile << "Unique vertices\t" + std::to_string(amountOfNonZeroNodes) + "\n";
@@ -426,5 +426,4 @@ int main(int argc, char* argv[]) {
 
     return 0;
 }
-
 
