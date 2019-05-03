@@ -269,7 +269,7 @@ void read_directed_graph(std::string file_path) {
             printf("\nCount nodes/edges is required before calculating average degree.");
             exit(1);
         }
-        float avgDegree = 2 * float(amountEdges) / float(amountOfNonZeroNodes);
+        float avgDegree = float(amountEdges) / float(amountOfNonZeroNodes);
         std::cout << "Avg deg\t" << avgDegree << std::endl;
         outputFile << "Avg deg\t" + std::to_string(avgDegree) + "\n";
     }
@@ -381,9 +381,6 @@ void start_calculating(char* argv[]) {
 }
 
 int main(int argc, char* argv[]) {
-
-
-
 
     // Determines whether to calculate all or a single property
     if (strcmp(argv[3], "avgdegree") == 0) {
